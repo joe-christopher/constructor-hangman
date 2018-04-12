@@ -2,6 +2,8 @@
 // Constructor initialize
 var Word = require("./word.js");
 var inquirer = require("inquirer");
+//flag to check if new word is needed
+
 
 // string containing alphabet
 var letter = "abcdefghijklmnopqrstuvwxyz";
@@ -65,9 +67,9 @@ var randomIndex = Math.floor(Math.random() * pokemon.length);
 var randomWord = pokemon[randomIndex];
 
 // Pass random word through Word constructor
-computerWord = new Word.Word(randomWord);
+hangmanWord = new Word.Word(randomWord);
 
-var needNewWord = false; //flag to check if new word is needed
+needNewWord = false; //flag to check if new word is needed
 
 // Arrays for guessed correct and incorrect letters 
 var incorrectLetters = [];
@@ -86,7 +88,7 @@ function hangman() {
         var randomWord = pokemon[randomIndex];
 
         // Pass random word through Word constructor
-        computerWord = new Word.Word(randomWord);
+        hangmanWord = new Word.Word(randomWord);
 
         // have new word, set flag to false
         needNewWord = false;
@@ -95,7 +97,7 @@ function hangman() {
 
     // Variable and function used to test if a letter guessed is correct
     var wordComplete = [];
-    computerWord.objArray.forEach(completeCheck);
+    hangmanWord.wordArray.forEach(completeCheck);
 
     // Check if word has letters still to be guessed
     if (wordComplete.includes(false)) {
@@ -109,7 +111,7 @@ function hangman() {
             ])
             .then(function (input) {
 
-                // User Validation for multiples or not a letter
+                // User Validation for multiples letters at once or not a letter
                 if (!letter.includes(input.userinput) || input.userinput.length > 1) {
                     console.log("\nOne letter only at a time!\n");
                     hangman();
@@ -125,10 +127,10 @@ function hangman() {
                         var wordCheckArray = [];
 
                         // Run guess through word constructor method to check if word includes use letter
-                        computerWord.userGuess(input.userinput);
+                        hangmanWord.userGuess(input.userinput);
 
                         // Compare with word complete to see if a guess was correct
-                        computerWord.objArray.forEach(wordCheck);
+                        hangmanWord.wordArray.forEach(wordCheck);
                         if (wordCheckArray.join('') === wordComplete.join('')) {
                             console.log("\nIncorrect\n");
                             // Add guessed letter to incorrect array
@@ -141,7 +143,7 @@ function hangman() {
                         }
 
                         // Print the word to terminal
-                        computerWord.log();
+                        hangmanWord.log();
 
                         // Print guesses left
                         console.log("Guesses Left: " + guessesLeft + "\n");
@@ -191,7 +193,7 @@ function restartGame() {
             }
         ])
         .then(function (input) {
-            if (input.restart === "Play Again") {
+            if (input.restart === "Play Again") { //clear arrays, reset guesses, get new word
                 needNewWord = true;
                 incorrectLetters = [];
                 correctLetters = [];

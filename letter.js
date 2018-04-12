@@ -2,11 +2,11 @@ function Letter(value) {
     this.letter = value;
     this.guessed = false;
     this.print = function () {
-        // Added functionality for computer Guess with more than one word
+        //if the letter is empty, it was already guessed
         if (this.letter === " ") {
             this.guessed = true;
             return " ";
-        } else {
+        } else { //letter wasnt guessed yet, display placeholder _
             if (this.guessed === false) {
                 return "_";
             } else {
